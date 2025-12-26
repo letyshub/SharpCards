@@ -11,10 +11,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     
     - name: Setup .NET
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
         
@@ -25,11 +25,14 @@ jobs:
       run: dotnet build --no-restore
       
     - name: Test with Coverage
-      # Uruchamia testy i generuje raport pokrycia
+      # Generuje raport w formacie Cobertura
       run: dotnet test --no-build --verbosity normal --collect:"XPlat Code Coverage"
       
     - name: Upload Coverage Report
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: coverage-report
-        path: tests/**/coverage.cobertura.xml
+        # Upewniamy się, że ścieżka uwzględnia wszystkie wyniki
+        path: '**/TestResults/**/coverage.cobertura.xml'
+        # Opcjonalnie: ile dni trzymać raport
+        retention-days: 5
